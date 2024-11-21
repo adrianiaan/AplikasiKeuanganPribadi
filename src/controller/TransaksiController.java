@@ -8,15 +8,14 @@ public class TransaksiController {
 
     // Method untuk menambah transaksi ke database
     public void tambahTransaksi(Transaksi transaksi) {
-        String sql = "INSERT INTO transaksi (id, tanggal, deskripsi, kategori, jumlah) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO transaksi (tanggal, deskripsi, kategori, jumlah) VALUES (?, ?, ?, ?)";
         try (Connection conn = database.DatabaseHelper.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, transaksi.getId());
-            pstmt.setDate(2, new java.sql.Date(transaksi.getTanggal().getTime()));
-            pstmt.setString(3, transaksi.getDeskripsi());
-            pstmt.setString(4, transaksi.getKategori().toString());
-            pstmt.setDouble(5, transaksi.getJumlah());
-            pstmt.executeUpdate();
+            pstmt.setDate(1, new java.sql.Date(transaksi.getTanggal().getTime())); // Konversi tanggal ke SQL Date
+            pstmt.setString(2, transaksi.getDeskripsi()); // Deskripsi transaksi
+            pstmt.setString(3, transaksi.getKategori().toString()); // Enum kategori menjadi String
+            pstmt.setDouble(4, transaksi.getJumlah()); // Jumlah transaksi
+            pstmt.executeUpdate(); // Menjalankan query untuk menambah transaksi
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -57,7 +56,7 @@ public class TransaksiController {
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
-            model.setRowCount(0);
+            model.setRowCount(0); // Membersihkan data lama dari JTable
 
             while (rs.next()) {
                 model.addRow(new Object[]{

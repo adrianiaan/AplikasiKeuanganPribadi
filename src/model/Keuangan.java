@@ -3,10 +3,15 @@ package model;
 import java.util.Date;
 
 public class Keuangan {
-    private int id; // Menggunakan int untuk ID
-    private Date tanggal; // Menggunakan Date untuk tanggal
+    private int id; // ID transaksi
+    private Date tanggal; // Tanggal transaksi
 
-    // Constructor: Menginisialisasi atribut
+    // Constructor tanpa ID untuk penambahan data baru
+    public Keuangan(Date tanggal) {
+        this.tanggal = tanggal;
+    }
+
+    // Constructor dengan ID untuk data yang sudah ada
     public Keuangan(int id, Date tanggal) {
         this.id = id;
         this.tanggal = tanggal;

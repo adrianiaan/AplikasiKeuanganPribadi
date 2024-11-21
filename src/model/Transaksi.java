@@ -4,12 +4,20 @@ import java.util.Date;
 
 public class Transaksi extends Keuangan {
     private String deskripsi;  // Deskripsi transaksi
-    private Kategori kategori; // Menggunakan Enum Kategori
-    private double jumlah;     // Jumlah uang dalam transaksi
+    private Kategori kategori; // Kategori transaksi (ENUM)
+    private double jumlah;     // Jumlah transaksi
 
-    // Constructor: Menginisialisasi atribut dari parent dan child class
+    // Constructor tanpa ID untuk data baru
+    public Transaksi(Date tanggal, String deskripsi, Kategori kategori, double jumlah) {
+        super(tanggal); // Panggil constructor Keuangan tanpa ID
+        this.deskripsi = deskripsi;
+        this.kategori = kategori;
+        this.jumlah = jumlah;
+    }
+
+    // Constructor dengan ID untuk data yang sudah ada
     public Transaksi(int id, Date tanggal, String deskripsi, Kategori kategori, double jumlah) {
-        super(id, tanggal); // Memanggil constructor dari parent class (Keuangan)
+        super(id, tanggal); // Panggil constructor Keuangan dengan ID
         this.deskripsi = deskripsi;
         this.kategori = kategori;
         this.jumlah = jumlah;

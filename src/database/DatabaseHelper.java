@@ -21,9 +21,9 @@ public class DatabaseHelper {
     // Method untuk membuat tabel jika belum ada
     public static void initializeDatabase() {
         try (Connection conn = getConnection(); Statement stmt = conn.createStatement()) {
-            // SQL untuk membuat tabel transaksi dengan tipe data yang diminta
+            // SQL untuk membuat tabel transaksi dengan AUTOINCREMENT pada kolom id
             String createTableSQL = "CREATE TABLE IF NOT EXISTS transaksi ("
-                    + "id INTEGER PRIMARY KEY, "  // Menggunakan INTEGER untuk ID
+                    + "id INTEGER PRIMARY KEY AUTOINCREMENT, "  // ID akan dibuat otomatis
                     + "tanggal DATE NOT NULL, "  // Menggunakan DATE untuk tanggal
                     + "deskripsi TEXT NOT NULL, "  // Menggunakan TEXT untuk deskripsi
                     + "kategori TEXT CHECK(kategori IN ('Pemasukan', 'Pengeluaran')) NOT NULL, "  // ENUM-like menggunakan CHECK
