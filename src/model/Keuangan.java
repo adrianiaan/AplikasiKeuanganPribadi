@@ -1,32 +1,32 @@
-// Package model untuk menyimpan kelas-kelas data
 package model;
 
-// Kelas Keuangan sebagai kelas induk (Parent Class)
+import java.util.Date;
+
 public class Keuangan {
-    private String id; // ID transaksi
-    private String tanggal; // Tanggal transaksi
+    private int id; // Menggunakan int untuk ID
+    private Date tanggal; // Menggunakan Date untuk tanggal
 
     // Constructor: Menginisialisasi atribut
-    public Keuangan(String id, String tanggal) {
+    public Keuangan(int id, Date tanggal) {
         this.id = id;
         this.tanggal = tanggal;
     }
 
     // Getter dan Setter untuk ID
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
     // Getter dan Setter untuk Tanggal
-    public String getTanggal() {
+    public Date getTanggal() {
         return tanggal;
     }
 
-    public void setTanggal(String tanggal) {
+    public void setTanggal(Date tanggal) {
         this.tanggal = tanggal;
     }
 

@@ -1,13 +1,14 @@
-// Kelas Transaksi sebagai kelas turunan (Child Class)
 package model;
 
+import java.util.Date;
+
 public class Transaksi extends Keuangan {
-    private String deskripsi; // Deskripsi transaksi
-    private String kategori;  // Kategori transaksi (Pemasukan atau Pengeluaran)
-    private double jumlah;    // Jumlah uang dalam transaksi
+    private String deskripsi;  // Deskripsi transaksi
+    private Kategori kategori; // Menggunakan Enum Kategori
+    private double jumlah;     // Jumlah uang dalam transaksi
 
     // Constructor: Menginisialisasi atribut dari parent dan child class
-    public Transaksi(String id, String tanggal, String deskripsi, String kategori, double jumlah) {
+    public Transaksi(int id, Date tanggal, String deskripsi, Kategori kategori, double jumlah) {
         super(id, tanggal); // Memanggil constructor dari parent class (Keuangan)
         this.deskripsi = deskripsi;
         this.kategori = kategori;
@@ -24,11 +25,11 @@ public class Transaksi extends Keuangan {
     }
 
     // Getter dan Setter untuk Kategori
-    public String getKategori() {
+    public Kategori getKategori() {
         return kategori;
     }
 
-    public void setKategori(String kategori) {
+    public void setKategori(Kategori kategori) {
         this.kategori = kategori;
     }
 

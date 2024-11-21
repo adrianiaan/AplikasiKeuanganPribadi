@@ -1,48 +1,75 @@
-// Package controller untuk logika aplikasi
 package controller;
 
-import model.Transaksi; // Import kelas Transaksi
-import java.util.ArrayList; // Menggunakan ArrayList untuk menyimpan data
-import javax.swing.table.DefaultTableModel; // Model tabel untuk JTable
+import model.Transaksi;
+import javax.swing.table.DefaultTableModel;
+import java.sql.*;
 
 public class TransaksiController {
-    // List untuk menyimpan transaksi
-    private ArrayList<Transaksi> daftarTransaksi;
 
-    // Constructor: Menginisialisasi ArrayList
-    public TransaksiController() {
-        daftarTransaksi = new ArrayList<>();
-    }
-
-    // Method untuk menambah transaksi
+    // Method untuk menambah transaksi ke database
     public void tambahTransaksi(Transaksi transaksi) {
-        daftarTransaksi.add(transaksi); // Menambahkan transaksi ke list
+        String sql = "INSERT INTO transaksi (id, tanggal, deskripsi, kategori, jumlah) VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = database.DatabaseHelper.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, transaksi.getId());
+            pstmt.setDate(2, new java.sql.Date(transaksi.getTanggal().getTime()));
+            pstmt.setString(3, transaksi.getDeskripsi());
+            pstmt.setString(4, transaksi.getKategori().toString());
+            pstmt.setDouble(5, transaksi.getJumlah());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    // Method untuk mengubah transaksi berdasarkan index
-    public void ubahTransaksi(int index, Transaksi transaksi) {
-        daftarTransaksi.set(index, transaksi); // Mengubah data pada index tertentu
+    // Method untuk menghapus transaksi dari database
+    public void hapusTransaksi(int id) {
+        String sql = "DELETE FROM transaksi WHERE id = ?";
+        try (Connection conn = database.DatabaseHelper.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    // Method untuk menghapus transaksi berdasarkan index
-    public void hapusTransaksi(int index) {
-        daftarTransaksi.remove(index); // Menghapus data pada index tertentu
+    // Method untuk mengubah transaksi di database
+    public void ubahTransaksi(Transaksi transaksi) {
+        String sql = "UPDATE transaksi SET tanggal = ?, deskripsi = ?, kategori = ?, jumlah = ? WHERE id = ?";
+        try (Connection conn = database.DatabaseHelper.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setDate(1, new java.sql.Date(transaksi.getTanggal().getTime()));
+            pstmt.setString(2, transaksi.getDeskripsi());
+            pstmt.setString(3, transaksi.getKategori().toString());
+            pstmt.setDouble(4, transaksi.getJumlah());
+            pstmt.setInt(5, transaksi.getId());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    // Method untuk menampilkan data transaksi ke JTable
+    // Method untuk menampilkan data transaksi dari database ke JTable
     public void tampilkanKeTabel(DefaultTableModel model) {
-        // Membersihkan tabel sebelum menampilkan data baru
-        model.setRowCount(0);
+        String sql = "SELECT * FROM transaksi";
+        try (Connection conn = database.DatabaseHelper.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
 
-        // Menambahkan setiap transaksi ke model tabel
-        for (Transaksi t : daftarTransaksi) {
-            model.addRow(new Object[]{
-                t.getId(),
-                t.getTanggal(),
-                t.getDeskripsi(),
-                t.getKategori(),
-                t.getJumlah()
-            });
+            model.setRowCount(0);
+
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                    rs.getInt("id"),
+                    rs.getDate("tanggal"),
+                    rs.getString("deskripsi"),
+                    rs.getString("kategori"),
+                    rs.getDouble("jumlah")
+                });
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }
