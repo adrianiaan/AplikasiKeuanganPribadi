@@ -7,13 +7,13 @@ import java.sql.Statement;
 
 public class DatabaseHelper {
     private static final String DATABASE_URL = "jdbc:sqlite:keuangan.db"; // Lokasi file database SQLite
-    private static Connection connection;
+    private static Connection connection;  // Deklarasi koneksi
 
     // Method untuk mendapatkan koneksi ke database
     public static Connection getConnection() throws SQLException {
-        if (connection == null) {
-            // Membuka koneksi ke database SQLite, file "keuangan.db" akan dibuat jika belum ada
-            connection = DriverManager.getConnection(DATABASE_URL);
+        // Membuka koneksi jika belum ada atau sudah tertutup
+        if (connection == null || connection.isClosed()) {
+            connection = DriverManager.getConnection(DATABASE_URL);  // Membuka koneksi
         }
         return connection;
     }
@@ -21,19 +21,28 @@ public class DatabaseHelper {
     // Method untuk membuat tabel jika belum ada
     public static void initializeDatabase() {
         try (Connection conn = getConnection(); Statement stmt = conn.createStatement()) {
-            // SQL untuk membuat tabel transaksi dengan AUTOINCREMENT pada kolom id
+            // SQL untuk membuat tabel transaksi jika belum ada
             String createTableSQL = "CREATE TABLE IF NOT EXISTS transaksi ("
-                    + "id INTEGER PRIMARY KEY AUTOINCREMENT, "  // ID akan dibuat otomatis
-                    + "tanggal DATE NOT NULL, "  // Menggunakan DATE untuk tanggal
-                    + "deskripsi TEXT NOT NULL, "  // Menggunakan TEXT untuk deskripsi
-                    + "kategori TEXT CHECK(kategori IN ('Pemasukan', 'Pengeluaran')) NOT NULL, "  // ENUM-like menggunakan CHECK
-                    + "jumlah REAL NOT NULL"  // Menggunakan REAL untuk jumlah
+                    + "id INTEGER PRIMARY KEY AUTOINCREMENT, "  // ID otomatis
+                    + "tanggal DATE NOT NULL, "  // Tanggal transaksi
+                    + "deskripsi TEXT NOT NULL, "  // Deskripsi transaksi
+                    + "kategori TEXT CHECK(kategori IN ('Pemasukan', 'Pengeluaran')) NOT NULL, "  // Kategori transaksi
+                    + "jumlah REAL NOT NULL"  // Jumlah transaksi
                     + ");";
 
             stmt.execute(createTableSQL); // Menjalankan query untuk membuat tabel
             System.out.println("Tabel transaksi berhasil dibuat atau sudah ada.");
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    // Method untuk menutup koneksi
+    public static void closeConnection() throws SQLException {
+        // Pastikan koneksi tidak null dan masih terbuka
+        if (connection != null && !connection.isClosed()) {
+            connection.close();  // Menutup koneksi database
+            System.out.println("Koneksi database ditutup.");
         }
     }
 }
