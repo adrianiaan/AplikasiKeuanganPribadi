@@ -163,3 +163,7 @@ public class TampilanUtama extends javax.swing.JFrame {
    ```
 2. Kompilasi dan jalankan menggunakan IDE seperti IntelliJ IDEA atau NetBeans.
 
+
+## Contoh Tampilan
+![image](https://github.com/user-attachments/assets/615c5491-3bae-4f8d-ba4f-f6bfc1c3424e)
+
