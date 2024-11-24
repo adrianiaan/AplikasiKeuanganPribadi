@@ -16,16 +16,16 @@ import model.Transaksi;
  */
 public class TampilanUtama extends javax.swing.JFrame {
 
-    // Deklarasi TransaksiController dan DefaultTableModel
+    // Deklarasi TransaksiController untuk mengelola transaksi dan DefaultTableModel untuk JTable
     private TransaksiController transaksiController;
     private DefaultTableModel tabelModel;
 
     public TampilanUtama() {
         initComponents();
-        
+
         // Isi combo box kategori pencarian
         isiComboBoxKategoriPencarian();
-        
+
         // Button Pencarian
         btnPencarian.addActionListener(e -> {
             String kategori = cmbKategoriPencarian.getSelectedItem().toString();
@@ -41,9 +41,9 @@ public class TampilanUtama extends javax.swing.JFrame {
             transaksiController.cariTransaksi(tabelModel, kategori, pencarian);
         });
 
-
         // Menambahkan FocusListener untuk mengosongkan txtJumlahUang saat diklik
         txtJumlahUang.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
                 txtJumlahUang.setText("");  // Kosongkan isi text field saat mendapatkan fokus
             }
@@ -51,12 +51,41 @@ public class TampilanUtama extends javax.swing.JFrame {
 
         // Menambahkan KeyListener untuk memvalidasi hanya angka pada txtJumlahUang
         txtJumlahUang.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 char c = evt.getKeyChar();
                 // Pastikan hanya angka dan titik desimal yang diterima
                 if (!Character.isDigit(c) && c != '.' && c != '\b') {
                     evt.consume();  // Menolak karakter yang tidak valid
                 }
+            }
+        });
+
+        // Kosongkan txtPencarian saat fokus masuk atau diklik
+        txtPencarian.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtPencarian.setText(""); // Kosongkan isi TextField
+            }
+        });
+        txtPencarian.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtPencarian.setText(""); // Kosongkan isi TextField
+            }
+        });
+
+        // Kosongkan txtAreaDeskripsi saat fokus masuk atau diklik
+        txtAreaDeskripsi.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtAreaDeskripsi.setText(""); // Kosongkan isi TextArea
+            }
+        });
+        txtAreaDeskripsi.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtAreaDeskripsi.setText(""); // Kosongkan isi TextArea
             }
         });
 
@@ -121,6 +150,7 @@ public class TampilanUtama extends javax.swing.JFrame {
             }
         });
     }
+
     private void isiComboBoxKategoriPencarian() {
         // Hapus item yang ada dalam ComboBox
         cmbKategoriPencarian.removeAllItems();
@@ -130,7 +160,6 @@ public class TampilanUtama extends javax.swing.JFrame {
             cmbKategoriPencarian.addItem(kategori.name()); // Menambahkan nama kategori (Pemasukan, Pengeluaran)
         }
     }
-
 
     private void isiComboBoxKategori() {
         // Hapus item yang ada dalam ComboBox
@@ -169,7 +198,8 @@ public class TampilanUtama extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
             }
         });
-
+        
+        // Event handler untuk tombol Ubah
         btnUbah.addActionListener(e -> {
             int selectedRow = jTable1.getSelectedRow();
             if (selectedRow >= 0) {
@@ -212,6 +242,7 @@ public class TampilanUtama extends javax.swing.JFrame {
             }
         });
 
+        // Event handler untuk tombol Hapus
         btnHapus.addActionListener(e -> {
             int selectedRow = jTable1.getSelectedRow();
             if (selectedRow >= 0) {
@@ -234,6 +265,7 @@ public class TampilanUtama extends javax.swing.JFrame {
             }
         });
 
+        // Event handler untuk tombol Muat
         btnMuat.addActionListener(e -> {
             try {
                 // Gunakan JFileChooser untuk memilih file CSV
@@ -264,6 +296,7 @@ public class TampilanUtama extends javax.swing.JFrame {
             }
         });
 
+        // Event handler untuk tombol Simpan
         btnSimpan.addActionListener(e -> {
             try {
                 // Gunakan JFileChooser untuk memilih lokasi penyimpanan file CSV
@@ -294,6 +327,7 @@ public class TampilanUtama extends javax.swing.JFrame {
             }
         });
 
+        // Event handler untuk tombol SinkronisasiData
         btnSinkronisasi.addActionListener(e -> {
             try {
                 // Gunakan JFileChooser untuk memilih lokasi file CSV
@@ -324,6 +358,7 @@ public class TampilanUtama extends javax.swing.JFrame {
             }
         });
 
+        // Event handler untuk tombol Cetak Laporan
         btnLaporan.addActionListener(e -> {
             try {
                 // Tentukan lokasi file PDF untuk menyimpan laporan

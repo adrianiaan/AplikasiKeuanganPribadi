@@ -103,6 +103,7 @@ public class TransaksiController {
         }
     }
 
+    // Method untuk Muat data transaksi dari File .CSV ke JTable
     public void muatDataDariFile(String filePath, DefaultTableModel model) {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
@@ -176,6 +177,7 @@ public class TransaksiController {
         }
     }
 
+    // Method untuk Menyimpan data transaksi dari database ke File .CSV
     public void simpanDataKeCSV(DefaultTableModel model, String filePath) {
         File file = new File(filePath);
         SimpleDateFormat dateFormat = new SimpleDateFormat("d MMMM yyyy", new Locale("id", "ID"));
@@ -244,6 +246,7 @@ public class TransaksiController {
         }
     }
 
+    // Method untuk Validasi data transaksi dari File .CSV ke JTable
     public boolean validasiFileCSV(String filePath) {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String header = br.readLine();
@@ -352,6 +355,7 @@ public class TransaksiController {
         return table;
     }
 
+    // Method untuk Pencarian data transaksi di JTable
     public void cariTransaksi(DefaultTableModel model, String kategori, String pencarian) {
         String sql = "SELECT * FROM transaksi WHERE kategori = ? AND (deskripsi LIKE ?)";
         SimpleDateFormat dateFormat = new SimpleDateFormat("d MMMM yyyy", new Locale("id", "ID"));
